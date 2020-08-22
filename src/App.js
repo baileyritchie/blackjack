@@ -43,13 +43,15 @@ const App = props =>  {
   }
 
   return (
-    <div>
-      <h1>Beginning of blackjack</h1>
-      <button onClick={() => initializeDeck()}>Start Game</button>
-      {playerCards.map(hand => {
+    <div className="container mx-auto text-center bg-gray-300 w-full h-screen">
+      <h1 className=" text-6xl">Beginning of blackjack</h1>
+      <button className="bg-blue-500 my-20 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => initializeDeck()}>Start Game</button>
+      {dealerCards.length > 1 ? <div className="flex justify-center"><Card suite={dealerCards[0][0]} value={dealerCards[0][1]}/> </div> : <div></div>}
+      {<div className="flex justify-center">
+        {playerCards.map(hand => {
         return <Card suite={hand[0]} value={hand[1]}/>
-      })}
-      {dealerCards.length > 1 ? <Card suite={dealerCards[0][0]} value={dealerCards[0][1]}/> : <div></div>}
+        })}
+      </div>}
     </div>
   );
 }
