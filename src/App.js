@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
-import './App.css';
+import './tailwind.css'
 import Card from './components/Card';
-import {Button,SpacedButton} from './appstyles';
+import Hero from './components/Hero';
+import Board from './components/Board';
 
 const App = (props) =>  {
   const SUITS = ['H', 'D', 'S', 'C'];
@@ -11,6 +12,7 @@ const App = (props) =>  {
   const [dealerCards,setDealerCards] = useState([]);
   const [isPlaying, setPlayingState] = useState(false);
   const [gameOver,setGameOver] = useState(false);
+  const [getRound, setRound] = useState(0);
 
   const shuffleCards = (array) => {
     for (let first = array.length - 1; first > 0; first--) {
@@ -38,15 +40,15 @@ const App = (props) =>  {
     dealTwoCards(deck);
     setPlayingState(true);
   }
-  const Button = (props) => (
-    <button className="bg-blue-500 my-20 hover:bg-blue-700 
-    text-white font-bold py-2 px-4 rounded" 
-    onClick={() => initializeDeck()}>{props.text}</button>
-  )
-  const SpacedButton = (props) => (
-    <button className="bg-blue-500 my-20 hover:bg-blue-700 
-    text-white font-bold py-2 px-4 m-4 rounded" onClick={()=> hitPlayer(deck)}>{props.text}</button>
-  )
+  const findWinner = () => {
+    if (calculateTotal(playerCards) === 21 &&
+    calculateTotal(dealerCards) < 21) {
+      return 'player';
+    } else if ( calculateTotal(dealerCards) === 21 &&
+    calculateTotal(playerCards) < 21 ) {
+      return 'dealer';
+    } else return "";
+  }
   const calculateTotal = (cards) => {
     let values = cards.map( card => card[1]);
     
@@ -69,37 +71,32 @@ const App = (props) =>  {
     return calculateTotal(cards) > 21;
   }
   const hitPlayer = (currentDeck) => {
-    setPlayerCards(playerCards =>[...playerCards,currentDeck.pop()]);
+    if (!busted(deck)) {
+      setPlayerCards(playerCards =>[...playerCards,currentDeck.pop()]);
     console.log(playerCards);
-    if (busted(deck)) setGameOver(true);
+    }
   }
   return (
-    <div className="container mx-auto text-center bg-gray-300 w-full h-screen">
-      <h1 className="text-6xl">Beginning of blackjack</h1>
-      <Button text="Start Game"/>
-      {isPlaying ? <h1 className="text-2xl">Dealer's Card:</h1> : ""}
-      {dealerCards.length > 1 ? 
-      (<div className="flex justify-center">
-        <Card suite={dealerCards[0][0]} value={dealerCards[0][1]}/>
-      </div>) : ""}
-      {isPlaying ? 
-      (<div>
-        <h1 className="text-2xl">Your Cards:</h1>
-        <h1 className="text-lg my-4">Running Total: {calculateTotal(playerCards)}</h1>
-      </div>) : ""}
-      {<div className="flex justify-center">
-        {playerCards.map(hand => {
-        return <Card suite={hand[0]} value={hand[1]} key={hand}/>
-        })}
-      </div>}
-      {isPlaying ? <SpacedButton text="HIT" /> : ""}
-      {isPlaying ? <Button text="STAY"/> : ""}
-      {gameOver ? 
-      <>
-        <h1>GAME OVER!</h1>
-        <h1>{calculateTotal(playerCards) > 21 ? 'Player' : 'Dealer'} won!</h1>
-      </> : ""}
+    <div className="app">
+      <div className="container mx-auto text-center">
+        <Hero buttonText="Start Game" buttonSubmit={() => initializeDeck()}/>
+        <Board 
+          getTotal = {(cards)=> calculateTotal(cards)}
+          gameStatus = {gameOver}
+          playingStatus = {isPlaying} 
+          pCards = {playerCards}
+          dCards = {dealerCards}
+          determineWinner = {() => findWinner()}
+          changeGameStatus = {(state) => setGameOver(state) }
+          hitPlayer = {(deck) => hitPlayer(deck)}
+          currentDeck = {deck}
+          hitText = "HIT"
+          stayText="STAY"
+          round = {getRound}
+          addRound = {(val) => setRound(val)}/>
+      </div>
     </div>
+    
   );
 }
 
