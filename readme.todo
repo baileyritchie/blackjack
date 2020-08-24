@@ -1,0 +1,12 @@
+Blackjack project:
+  ✔ create "HIT" and "STAY" onClick methods @done(20-08-22 16:38)
+  ✔ finish function to calculate total value of cards @done(20-08-22 16:38)
+  ✔ create "ace" conditional functionality @done(20-08-22 16:38)
+  ✔ make all common tailwind objects their own class @done(20-08-22 14:46)
+  ✔ fix hit and stay button's onClick @done(20-08-23 17:06)
+  ✔ move some game logic functions to a different module @done(20-08-23 17:07)
+
+
+
+
+
