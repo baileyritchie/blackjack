@@ -14,9 +14,6 @@ const Board = ({getTotal,gameStatus,playingStatus,pCards,
     addRound(round,1);
     }}>{hitText}</button>
   )
-  const playerLarger = () => {
-    return pCards > dCards;
-  }
   const isBust = (cards) => {
     return getTotal(cards) > 21;
   }
@@ -24,18 +21,13 @@ const Board = ({getTotal,gameStatus,playingStatus,pCards,
     <button className="bg-blue-500 my-20 hover:bg-blue-700 
       text-white font-bold py-2 px-4 rounded flex-2" 
       onClick={() => {
-        while (getTotal(pCards) <= 21 ) {
-          if (playerLarger) {
-            addRound(round,1);
-            changeGameStatus(true);
-            setWinner('Player');
-            break;
-          } else if (!playerLarger) {
-            addRound(round,1);
-            changeGameStatus(true);
-            setWinner('Dealer');
-            break;
-          } 
+        addRound(round,1);
+        if (getTotal(pCards) > getTotal(dCards)) {
+          changeGameStatus(true);
+          setWinner('Player');
+        } else {
+          changeGameStatus(true);
+          setWinner('Dealer');
         }
       }}>{stayText}
     </button>
@@ -50,7 +42,7 @@ const Board = ({getTotal,gameStatus,playingStatus,pCards,
     { winner || isBust(pCards) ? 
     <>
       <h1 className="text-3xl ">Refresh our page to play again.</h1>
-    <h1 className="text-2xl m-4">Dealer ended with {getTotal(dCards)}.</h1>
+    <h1 className="text-2xl m-4">Dealer's end cards are:</h1>
       <div className="flex flex-wrap justify-center">{dCards.map(hand => {
         return <Card suite={hand[0]} value={hand[1]} key={hand}/>})}
       </div>
