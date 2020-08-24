@@ -7,12 +7,14 @@ import Board from './components/Board';
 const App = (props) =>  {
   const SUITS = ['H', 'D', 'S', 'C'];
   const VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+  const EMPTY_ARR = []
   const [deck, setDeck] = useState([]);
   const [playerCards,setPlayerCards] = useState([]);
   const [dealerCards,setDealerCards] = useState([]);
   const [isPlaying, setPlayingState] = useState(false);
   const [gameOver,setGameOver] = useState(false);
   const [getRound, setRound] = useState(0);
+  const [winner,setWinner] = useState("");
 
   const shuffleCards = (array) => {
     for (let first = array.length - 1; first > 0; first--) {
@@ -25,7 +27,11 @@ const App = (props) =>  {
     setPlayerCards(playerCards => [...playerCards, arr.pop(),arr.pop()]);
     setDealerCards(dealerCards => [...dealerCards,arr.pop(),arr.pop()]);
   }
-  
+  const refreshDeck = () => {
+    setDeck(EMPTY_ARR);
+    setPlayerCards(EMPTY_ARR);
+    setDealerCards(EMPTY_ARR);
+  }
   const initializeDeck = () => {
     setDeck( deck => {
       for (let suitIndex = 0; suitIndex < SUITS.length; suitIndex++) {
@@ -47,7 +53,7 @@ const App = (props) =>  {
     } else if ( calculateTotal(dealerCards) === 21 &&
     calculateTotal(playerCards) < 21 ) {
       return 'dealer';
-    } else return "";
+    } else return "BUST!";
   }
   const calculateTotal = (cards) => {
     let values = cards.map( card => card[1]);
@@ -67,14 +73,8 @@ const App = (props) =>  {
 
     return sum;
   }
-  const busted = (cards) => {
-    return calculateTotal(cards) > 21;
-  }
   const hitPlayer = (currentDeck) => {
-    if (!busted(deck)) {
-      setPlayerCards(playerCards =>[...playerCards,currentDeck.pop()]);
-    console.log(playerCards);
-    }
+    setPlayerCards(playerCards =>[...playerCards,currentDeck.pop()]);
   }
   return (
     <div className="app">
@@ -93,7 +93,9 @@ const App = (props) =>  {
           hitText = "HIT"
           stayText="STAY"
           round = {getRound}
-          addRound = {(val) => setRound(val)}/>
+          addRound = {(currentRound,newRound) => setRound(currentRound+newRound)}
+          winner = {winner}
+          setWinner = {(val) => setWinner(val)}/>
       </div>
     </div>
     
