@@ -6,11 +6,8 @@
 2. Deal cards to player and dealer
 3. Player turn: hit or stay
    - repeat until bust or stay
-4. If player bust, dealer wins.
-5. Dealer turn: hit or stay
-   - repeat until total >= 17
-6. If dealer busts, player wins.
-7. Compare cards and declare winner.
+4. If player bust or dealer card is higher than player (after staying), dealer wins.
+5. Compare cards and declare winner.
 
 ## Data Structure and Requirements:
 
