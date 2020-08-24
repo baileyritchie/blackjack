@@ -1,15 +1,16 @@
 import React from 'react';
 import Card from './Card';
 
+// Functional Component representing Card Display
+
 const Board = ({getTotal,gameStatus,playingStatus,pCards,
-  dCards,determineWinner,changeGameStatus,hitPlayer,currentDeck,
+  dCards,changeGameStatus,hitPlayer,currentDeck,
   hitText,stayText,round,addRound,winner,setWinner}) => {
 
   const SpacedButton = () => (
   <button className="bg-blue-500 my-20 hover:bg-blue-700 
   text-white font-bold py-2 px-4 m-4 rounded" onClick={() => {
     hitPlayer(currentDeck);
-    console.log('players cards',pCards);
     addRound(round,1);
     }}>{hitText}</button>
   )
@@ -39,7 +40,7 @@ const Board = ({getTotal,gameStatus,playingStatus,pCards,
       }}>{stayText}
     </button>
   )
-  return (<div> {console.log('Dealers Cards:',dCards,"game status:",gameStatus,"round:",round)}
+  return (<div>
     {gameStatus && round > 0 && !isBust(pCards) ? 
     <>
       <h1 className="text-5xl my-12">GAME OVER!</h1>
@@ -48,8 +49,8 @@ const Board = ({getTotal,gameStatus,playingStatus,pCards,
     {isBust(pCards) ? <h1 className="text-5xl">You lost - BUST!</h1> : ""}
     { winner || isBust(pCards) ? 
     <>
-      <h1 className="text-3xl ">Refresh our page to play again!</h1>
-      <h1 className="text-2xl m-4">Reveal of Dealer's Hand:</h1>
+      <h1 className="text-3xl ">Refresh our page to play again.</h1>
+    <h1 className="text-2xl m-4">Dealer ended with {getTotal(dCards)}.</h1>
       <div className="flex flex-wrap justify-center">{dCards.map(hand => {
         return <Card suite={hand[0]} value={hand[1]} key={hand}/>})}
       </div>
